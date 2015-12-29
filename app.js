@@ -27,15 +27,6 @@ const dbUrl = process.env.DB_URL || 'mongodb://localhost:27017/memenshare';
 
 const api = require('./routes/api');
 
-/**
- * Connect to database.
- */
-
-co(function* connectDb() {
-  let connect = thunkify(mongoose.connect).bind(mongoose);
-  return yield connect(dbUrl);
-}).then(init, err => console.log(err.stack));
-
 // setup middlewares
 function setupMiddlewares() {
   // logging
@@ -67,3 +58,9 @@ function init() {
   // start server
   app.listen(port);
 }
+
+// setup
+co(function* connectDb() {
+  let connect = thunkify(mongoose.connect).bind(mongoose);
+  return yield connect(dbUrl);
+}).then(init, err => console.log(err.stack));
