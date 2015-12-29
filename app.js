@@ -8,6 +8,7 @@ const compress = require('koa-compress');
 const convert = require('koa-convert');
 const requireDir = require('require-directory');
 const mongoose = require('mongoose');
+const thunkify = require('thunkify');
 const co = require('co');
 const Koa = require('koa');
 const app = new Koa();
@@ -27,33 +28,42 @@ const dbUrl = process.env.DB_URL || 'mongodb://localhost:27017/memenshare';
 const api = require('./routes/api');
 
 /**
- * Connect to database
+ * Connect to database.
  */
 
-mongoose.connect(dbUrl);
-mongoose.connection.on('error', err => console.log(err));
+co(function* connectDb() {
+  let connect = thunkify(mongoose.connect).bind(mongoose);
+  return yield connect(dbUrl);
+}).then(init, err => console.log(err.stack));
 
-// load mongoose models
-requireDir(module, './models');
+// setup middlewares
+function setupMiddlewares() {
+  // logging
+  if (env !== 'production') {
+    app.use(co.wrap(function* (ctx, next) {
+      const start = new Date;
+      yield next();
 
-// logging
-if (env !== 'production') {
-  app.use(co.wrap(function* (ctx, next) {
-    const start = new Date;
-    yield next();
+      const ms = new Date - start;
+      console.log(
+        `${ctx.method} ${ctx.url} - ${ms}ms - ${ctx.response.status}[${ctx.response.message}]`
+      );
+    }));
+  }
 
-    const ms = new Date - start;
-    console.log(
-      `${ctx.method} ${ctx.url} - ${ms}ms - ${ctx.response.status}[${ctx.response.message}]`
-    );
-  }));
+  // compression
+  app.use(convert(compress()));
+
+  // routing
+  app.use(api.routes());
 }
 
-// compression
-app.use(convert(compress()));
+// init
+function init() {
+  // load mongoose models
+  requireDir(module, './models');
+  setupMiddlewares();
 
-// routing
-app.use(api.routes());
-
-// start server
-app.listen(port);
+  // start server
+  app.listen(port);
+}
