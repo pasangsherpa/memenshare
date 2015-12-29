@@ -14,28 +14,28 @@ const Koa = require('koa');
 const app = new Koa();
 
 /**
- * Environment variables.
- */
-
-const env = process.env.NODE_ENV || 'development';
-const port = process.env.PORT || 3000;
-const dbUrl = process.env.DB_URL || 'mongodb://localhost:27017/memenshare';
-
-/**
  * Load routes.
  */
 
 const api = require('./routes/api');
+
+/**
+ * Environment variables.
+ */
+
+let env = process.env.NODE_ENV || 'development';
+let port = process.env.PORT || 3000;
+let dbUrl = process.env.DB_URL || 'mongodb://localhost:27017/memenshare';
 
 // setup middlewares
 function setupMiddlewares() {
   // logging
   if (env !== 'production') {
     app.use(co.wrap(function* (ctx, next) {
-      const start = new Date;
+      let start = new Date;
       yield next();
 
-      const ms = new Date - start;
+      let ms = new Date - start;
       console.log(
         `${ctx.method} ${ctx.url} - ${ms}ms - ${ctx.response.status}[${ctx.response.message}]`
       );

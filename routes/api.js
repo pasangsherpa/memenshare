@@ -7,15 +7,16 @@
 const pkgJson = require('../package');
 const Router = require('koa-router');
 
-const api = new Router({
-  prefix: '/api'
-});
-
 /**
  * Load routes.
  */
 
 const memes = require('./memes');
+
+// create api router
+let api = new Router({
+  prefix: '/api'
+});
 
 // api health check
 api.get('/', ctx => {

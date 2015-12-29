@@ -7,10 +7,6 @@
 const R = require('ramda');
 const Router = require('koa-router');
 
-const memes = new Router({
-  prefix: '/memes'
-});
-
 // dummy db
 let list = [{
   id: 1,
@@ -22,6 +18,11 @@ let list = [{
   id: 3,
   name: 'foo'
 }]
+
+// create memes router
+let memes = new Router({
+  prefix: '/memes'
+});
 
 /**
  * GET all memes.
