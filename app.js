@@ -49,18 +49,22 @@ function setupMiddlewares() {
   app.use(api.routes());
 }
 
-// init
-function init() {
-  // load mongoose models
+/**
+ * Init.
+ */
+
+co(function* init() {
+  // connect to db
+  let connect = thunkify(mongoose.connect).bind(mongoose);
+  yield connect(dbUrl);
+
+  // load db models
   requireDir(module, './models');
+
   setupMiddlewares();
 
-  // start server
+}).then(() => {
   app.listen(port);
-}
-
-// setup
-co(function* connectDb() {
-  let connect = thunkify(mongoose.connect).bind(mongoose);
-  return yield connect(dbUrl);
-}).then(init, err => console.log(err.stack));
+}, err => {
+  console.log(err.stack)
+});
