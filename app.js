@@ -27,7 +27,10 @@ let env = process.env.NODE_ENV || 'development';
 let port = process.env.PORT || 3000;
 let dbUrl = process.env.DB_URL || 'mongodb://localhost:27017/memenshare';
 
-// setup middlewares
+/**
+ * Setup middlewares.
+ */
+
 function setupMiddlewares() {
   // logging
   if (env !== 'production') {
