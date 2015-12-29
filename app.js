@@ -6,6 +6,7 @@
 
 const compress = require('koa-compress');
 const convert = require('koa-convert');
+const mongoose = require('mongoose');
 const co = require('co');
 const Koa = require('koa');
 const app = new Koa();
@@ -14,13 +15,22 @@ const app = new Koa();
  * Load routes.
  */
 
-const memes = require('./routes/memes');
+const api = require('./routes/api');
 
 /**
- * Environment.
+ * Environment variables.
  */
 
 const env = process.env.NODE_ENV || 'development';
+const port = process.env.PORT || 3000;
+const dbUrl = process.env.DB_URL || 'mongodb://localhost:27017/memenshare';
+
+/**
+ * Connect to database
+ */
+
+mongoose.connect(dbUrl);
+mongoose.connection.on('error', err => console.log(err));
 
 // logging
 if (env !== 'production') {
@@ -39,7 +49,7 @@ if (env !== 'production') {
 app.use(convert(compress()));
 
 // routing
-app.use(memes.routes());
+app.use(api.routes());
 
-// start server at port 3000
-app.listen(3000);
+// start server
+app.listen(port);

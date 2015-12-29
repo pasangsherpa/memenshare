@@ -43,7 +43,6 @@ memes.get('/:id', ctx => {
   ctx.body = meme;
 });
 
-
 /**
  * Expose `memes`.
  */
