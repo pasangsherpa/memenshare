@@ -5,6 +5,7 @@
  */
 
 const co = require('co');
+const utils = require('lib/utils');
 const mongoose = require('mongoose');
 const Meme = mongoose.model('Meme');
 
@@ -31,10 +32,11 @@ exports.getMemes = co.wrap(function* (ctx, next) {
 
 exports.getMemeById = co.wrap(function* (ctx, next) {
   let id = ctx.params.id;
+  ctx.assert(mongoose.Types.ObjectId.isValid(id), 404, 'Meme not found');
 
   try {
     let meme = yield Meme.findById(id).exec();
-    ctx.assert.notEqual(meme, null, 404, 'Meme not found');
+    ctx.assert(meme, 404, 'Meme not found');
 
     ctx.body = meme;
   } catch (err) {
@@ -48,17 +50,36 @@ exports.getMemeById = co.wrap(function* (ctx, next) {
 
 exports.createMeme = co.wrap(function* (ctx, next) {
   let body = ctx.request.body;
-  ctx.assert.notEqual(body, null, 400, 'The body is empty');
+  ctx.assert(body, 400, 'The body is empty');
 
   try {
     let data = JSON.parse(body);
-    let meme = new Meme(data);
-    yield meme.save();
+    let meme = yield Meme.create(data);
 
+    // set Location header
+    ctx.set('Location', utils.generateResourceUrl('memes', meme.id));
     ctx.status = 201;
-    ctx.body = {
-      id: meme.id
-    };
+  } catch (err) {
+    ctx.throw(err);
+  }
+});
+
+/**
+ * Update meme.
+ */
+
+exports.updateMeme = co.wrap(function* (ctx, next) {
+  let id = ctx.params.id;
+  ctx.assert(mongoose.Types.ObjectId.isValid(id), 404, 'Meme not found');
+
+  let body = ctx.request.body;
+  ctx.assert(body, 400, 'The body is empty');
+
+  try {
+    let data = JSON.parse(body);
+    let meme = yield Meme.findByIdAndUpdate(id, data);
+
+    ctx.status = 200;
   } catch (err) {
     ctx.throw(err);
   }
