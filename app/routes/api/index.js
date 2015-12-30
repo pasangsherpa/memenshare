@@ -4,7 +4,7 @@
  * Module dependencies.
  */
 
-const pkgJson = require('../../package');
+const pkgJson = require('package');
 const Router = require('koa-router');
 
 /**

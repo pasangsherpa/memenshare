@@ -1,6 +1,13 @@
 'use strict';
 
 /**
+ * Allow application-level modules to be required as if
+ * they were installed into the node_modules directory.
+ */
+
+require('app-module-path').addPath(__dirname);
+
+/**
  * Module dependencies.
  */
 
@@ -11,7 +18,7 @@ const error = require('koa-error');
 const requireDir = require('require-directory');
 const mongoose = require('mongoose');
 const thunkify = require('thunkify');
-const logger = require('./lib/logger');
+const logger = require('lib/logger');
 const co = require('co');
 const Koa = require('koa');
 const app = new Koa();
@@ -44,7 +51,7 @@ function setupMiddlewares() {
   app.use(convert(error()));
 
   // routing
-  let api = require('./app/routes/api');
+  let api = require('app/routes/api');
   app.use(api.routes());
 }
 

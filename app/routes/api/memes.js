@@ -10,9 +10,12 @@ const Router = require('koa-router');
  * Load controllers.
  */
 
-const memeController = require('../controllers/meme');
+const memeController = require('app/controllers/meme');
 
-// create memes router
+/**
+ * Create memes router.
+ */
+
 let memes = new Router({
   prefix: '/memes'
 });
@@ -34,6 +37,12 @@ memes.get('/:id', memeController.getMemeById);
  */
 
 memes.post('/', memeController.createMeme);
+
+/**
+ * PUT meme by :id. `/api/memes/:id`
+ */
+
+memes.put('/:id', memeController.updateMeme);
 
 /**
  * Expose `memes`.
