@@ -45,6 +45,12 @@ memes.post('/', memeController.createMeme);
 memes.put('/:id', memeController.updateMeme);
 
 /**
+ * DELETE meme by :id. `/api/memes/:id`
+ */
+
+memes.delete('/:id', memeController.deleteMeme);
+
+/**
  * Expose `memes`.
  */
 

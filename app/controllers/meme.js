@@ -65,7 +65,7 @@ exports.createMeme = co.wrap(function* (ctx, next) {
 });
 
 /**
- * Update meme.
+ * Update meme by id.
  */
 
 exports.updateMeme = co.wrap(function* (ctx, next) {
@@ -78,6 +78,24 @@ exports.updateMeme = co.wrap(function* (ctx, next) {
   try {
     let data = JSON.parse(body);
     let meme = yield Meme.findByIdAndUpdate(id, data);
+    ctx.assert(meme, 404, 'Meme not found');
+
+    ctx.status = 200;
+  } catch (err) {
+    ctx.throw(err);
+  }
+});
+
+/**
+ * Delete meme by id.
+ */
+
+exports.deleteMeme = co.wrap(function* (ctx, next) {
+  let id = ctx.params.id;
+  ctx.assert(mongoose.Types.ObjectId.isValid(id), 404, 'Meme not found');
+
+  try {
+    let meme = yield Meme.findByIdAndRemove(id);
     ctx.assert(meme, 404, 'Meme not found');
 
     ctx.status = 200;
