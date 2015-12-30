@@ -7,6 +7,7 @@
 const convert = require('koa-convert');
 const bodyParser = require('koa-body');
 const compress = require('koa-compress');
+const error = require('koa-error');
 const requireDir = require('require-directory');
 const mongoose = require('mongoose');
 const thunkify = require('thunkify');
@@ -39,6 +40,9 @@ function setupMiddlewares() {
   // compression
   app.use(convert(compress()));
 
+  // error handler
+  app.use(convert(error()));
+
   // routing
   let api = require('./app/routes/api');
   app.use(api.routes());
@@ -59,6 +63,16 @@ co(function* init() {
   setupMiddlewares();
 
 }).then(() => {
+  // error handler
+  app.on('error', (err) => {
+    if (env === 'production') {
+      // TODO: report err to cloud (ELK)
+    } else {
+      console.log(err);
+    }
+  });
+
+  // start server
   app.listen(port);
 }, err => {
   console.log(err.stack)

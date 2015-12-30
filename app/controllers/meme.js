@@ -5,7 +5,6 @@
  */
 
 const co = require('co');
-const assert = require('http-assert');
 const mongoose = require('mongoose');
 const Meme = mongoose.model('Meme');
 
@@ -35,7 +34,7 @@ exports.getMemeById = co.wrap(function* (ctx, next) {
 
   try {
     let meme = yield Meme.findById(id).exec();
-    assert(meme == null, 404, 'Meme not found', {'fo': 3});
+    ctx.assert.notEqual(meme, null, 404, 'Meme not found');
 
     ctx.body = meme;
   } catch (err) {
@@ -49,10 +48,7 @@ exports.getMemeById = co.wrap(function* (ctx, next) {
 
 exports.createMeme = co.wrap(function* (ctx, next) {
   let body = ctx.request.body;
-
-  if (!body) {
-    ctx.throw('The body is empty', 400);
-  }
+  ctx.assert.notEqual(body, null, 400, 'The body is empty');
 
   try {
     let data = JSON.parse(body);

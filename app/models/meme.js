@@ -16,8 +16,12 @@ let memeSchema = new Schema({
     type: String,
     required: true
   },
+  created: Date,
   meta: {
-    likes: Number
+    likes: {
+      type: Number,
+      default: 0
+    }
   }
 });
 
@@ -31,6 +35,15 @@ memeSchema.method('toJSON', function () {
   delete meme._id;
   delete meme.__v;
   return meme;
+});
+
+/**
+ * Pre save hook.
+ */
+
+memeSchema.pre('save', function (next) {
+  if (!this.created) this.created = new Date;
+  next();
 });
 
 // model creation
