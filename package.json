@@ -10,6 +10,7 @@
     "app-module-path": "^1.0.5",
     "boom": "^3.1.1",
     "co": "^4.6.0",
+    "config": "^1.17.1",
     "http-assert": "^1.1.1",
     "kerberos": "0.0.17",
     "koa": "^2.0.0-alpha.3",

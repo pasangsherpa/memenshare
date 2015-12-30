@@ -10,7 +10,7 @@ require('app-module-path').addPath(__dirname);
 /**
  * Module dependencies.
  */
-
+const config = require('config');
 const convert = require('koa-convert');
 const bodyParser = require('koa-body');
 const compress = require('koa-compress');
@@ -27,9 +27,9 @@ const app = new Koa();
  * Environment variables.
  */
 
-let env = process.env.NODE_ENV || 'development';
-let port = process.env.PORT || 3000;
-let dbUrl = process.env.DB_URL || 'mongodb://localhost:27017/memenshare';
+let env = config.util.getEnv('NODE_ENV');
+let port = config.get('API.port');
+let dbUrl = config.get('DB.url');
 
 /**
  * Setup middlewares.
