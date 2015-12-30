@@ -22,4 +22,4 @@ let memeSchema = new Schema({
 });
 
 // model creation
-mongoose.model('Meme', memeSchema);
+mongoose.model('Meme', memeSchema, 'Memes');

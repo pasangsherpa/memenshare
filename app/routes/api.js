@@ -4,7 +4,7 @@
  * Module dependencies.
  */
 
-const pkgJson = require('../package');
+const pkgJson = require('../../package');
 const Router = require('koa-router');
 
 /**
@@ -13,12 +13,18 @@ const Router = require('koa-router');
 
 const memes = require('./memes');
 
-// create api router
+/**
+ * Create api router.
+ */
+
 let api = new Router({
   prefix: '/api'
 });
 
-// api health check
+/**
+ * API health check. `/api`
+ */
+
 api.get('/', ctx => {
   ctx.body = {
     version: pkgJson.version,
@@ -26,7 +32,10 @@ api.get('/', ctx => {
   }
 });
 
-// register memes routes
+/**
+ * Register memes routes.
+ */
+
 api.use(memes.routes());
 
 /**

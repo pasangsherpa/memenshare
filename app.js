@@ -4,20 +4,16 @@
  * Module dependencies.
  */
 
-const compress = require('koa-compress');
 const convert = require('koa-convert');
+const bodyParser = require('koa-body');
+const compress = require('koa-compress');
 const requireDir = require('require-directory');
 const mongoose = require('mongoose');
 const thunkify = require('thunkify');
+const logger = require('./lib/logger');
 const co = require('co');
 const Koa = require('koa');
 const app = new Koa();
-
-/**
- * Load routes.
- */
-
-const api = require('./routes/api');
 
 /**
  * Environment variables.
@@ -34,21 +30,17 @@ let dbUrl = process.env.DB_URL || 'mongodb://localhost:27017/memenshare';
 function setupMiddlewares() {
   // logging
   if (env !== 'production') {
-    app.use(co.wrap(function* (ctx, next) {
-      let start = new Date;
-      yield next();
-
-      let ms = new Date - start;
-      console.log(
-        `${ctx.method} ${ctx.url} - ${ms}ms - ${ctx.response.status}[${ctx.response.message}]`
-      );
-    }));
+    app.use(logger());
   }
+
+  // parse body
+  app.use(convert(bodyParser()));
 
   // compression
   app.use(convert(compress()));
 
   // routing
+  let api = require('./app/routes/api');
   app.use(api.routes());
 }
 
@@ -62,7 +54,7 @@ co(function* init() {
   yield connect(dbUrl);
 
   // load db models
-  requireDir(module, './models');
+  requireDir(module, './app/models');
 
   setupMiddlewares();
 

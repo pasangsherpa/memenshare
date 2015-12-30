@@ -11,6 +11,7 @@
     "co": "^4.6.0",
     "kerberos": "0.0.17",
     "koa": "^2.0.0-alpha.3",
+    "koa-body": "^1.4.0",
     "koa-compress": "^1.0.8",
     "koa-convert": "^1.2.0",
     "koa-router": "^7.0.0",
