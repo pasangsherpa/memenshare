@@ -78,6 +78,7 @@ exports.updateMeme = co.wrap(function* (ctx, next) {
   try {
     let data = JSON.parse(body);
     let meme = yield Meme.findByIdAndUpdate(id, data);
+    ctx.assert(meme, 404, 'Meme not found');
 
     ctx.status = 200;
   } catch (err) {
