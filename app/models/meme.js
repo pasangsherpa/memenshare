@@ -21,5 +21,17 @@ let memeSchema = new Schema({
   }
 });
 
+/**
+ * toJSON method.
+ */
+
+memeSchema.method('toJSON', function () {
+  let meme = this.toObject();
+  meme.id = meme._id;
+  delete meme._id;
+  delete meme.__v;
+  return meme;
+});
+
 // model creation
 mongoose.model('Meme', memeSchema, 'Memes');
