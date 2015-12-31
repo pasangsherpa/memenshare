@@ -14,10 +14,8 @@ const Meme = mongoose.model('Meme');
  */
 
 exports.getMemes = co.wrap(function* (ctx, next) {
-  let memes;
-
   try {
-    memes = yield Meme.find().exec();
+    let memes = yield Meme.find().exec();
     ctx.body = {
       memes: memes
     };

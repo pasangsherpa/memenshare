@@ -68,7 +68,6 @@ co(function* init() {
   requireDir(module, './app/models');
 
   setupMiddlewares();
-
 }).then(() => {
   // error handler
   app.on('error', (err) => {

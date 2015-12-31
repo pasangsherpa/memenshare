@@ -16,13 +16,15 @@ let memeSchema = new Schema({
     type: String,
     required: true
   },
-  created: Date,
+  createdAt: Date,
+  updatedAt: Date,
   meta: {
     likes: {
       type: Number,
       default: 0
     }
-  }
+  },
+  tags: [String]
 });
 
 /**
@@ -42,8 +44,19 @@ memeSchema.method('toJSON', function () {
  */
 
 memeSchema.pre('save', function (next) {
-  if (!this.created) this.created = new Date;
+  this.createdAt = this.createdAt || Date.now();
+  this.updatedAt = Date.now();
   next();
+});
+
+/**
+ * Pre findOneAndUpdate hook.
+ */
+
+memeSchema.pre('findOneAndUpdate', function () {
+  this.findOneAndUpdate({}, {
+    updatedAt: Date.now()
+  });
 });
 
 // model creation
