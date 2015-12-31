@@ -7,7 +7,7 @@
 module.exports = {
   API: {
     port: process.env.PORT || 3000,
-    url: 'localhost:3000/api'
+    url: process.env.API_URL || 'localhost:3000/api'
   },
   DB: {
     name: 'memenshare',

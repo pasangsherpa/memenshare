@@ -17,7 +17,7 @@ exports.getMemes = co.wrap(function* (ctx, next) {
   try {
     let memes = yield Meme.find().exec();
     ctx.body = {
-      memes: memes
+      data: memes
     };
   } catch (err) {
     ctx.throw(err);
@@ -34,9 +34,11 @@ exports.getMemeById = co.wrap(function* (ctx, next) {
 
   try {
     let meme = yield Meme.findById(id).exec();
-    ctx.assert(meme, 404, 'Meme not found');
 
-    ctx.body = meme;
+    ctx.assert(meme, 404, 'Meme not found');
+    ctx.body = {
+      data: meme
+    };
   } catch (err) {
     ctx.throw(err);
   }
@@ -58,6 +60,7 @@ exports.createMeme = co.wrap(function* (ctx, next) {
     ctx.set('Location', utils.generateResourceUrl('memes', meme.id));
     ctx.status = 201;
   } catch (err) {
+    utils.formatError(err);
     ctx.throw(err);
   }
 });
