@@ -6,6 +6,7 @@
   "engines": {
     "node": "4.x"
   },
+  "main": "app.js",
   "scripts": {
     "start": "node app.js"
   },
@@ -14,7 +15,9 @@
     "boom": "^3.1.1",
     "co": "^4.6.0",
     "config": "^1.17.1",
+    "express": "^4.13.3",
     "http-assert": "^1.1.1",
+    "jsonapi-serializer": "^2.0.4",
     "kerberos": "0.0.17",
     "koa": "^2.0.0-alpha.3",
     "koa-body": "^1.4.0",

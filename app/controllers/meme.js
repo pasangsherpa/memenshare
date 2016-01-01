@@ -8,6 +8,7 @@ const co = require('co');
 const utils = require('lib/utils');
 const mongoose = require('mongoose');
 const Meme = mongoose.model('Meme');
+const Serializer = require('lib/serializer');
 
 /**
  * Get all memes.
@@ -15,10 +16,8 @@ const Meme = mongoose.model('Meme');
 
 exports.getMemes = co.wrap(function* (ctx, next) {
   try {
-    let memes = yield Meme.find().exec();
-    ctx.body = {
-      data: memes
-    };
+    let memes = yield Meme.find().lean().exec();
+    ctx.body = Serializer.serializeMeme(memes);
   } catch (err) {
     ctx.throw(err);
   }
