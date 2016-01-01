@@ -32,12 +32,10 @@ exports.getMemeById = co.wrap(function* (ctx, next) {
   ctx.assert(mongoose.Types.ObjectId.isValid(id), 404, 'Meme not found');
 
   try {
-    let meme = yield Meme.findById(id).exec();
+    let meme = yield Meme.findById(id).lean().exec();
 
     ctx.assert(meme, 404, 'Meme not found');
-    ctx.body = {
-      data: meme
-    };
+    ctx.body = Serializer.serializeMeme(meme);
   } catch (err) {
     ctx.throw(err);
   }
