@@ -74,7 +74,7 @@ co(function* init() {
     if (env === 'production') {
       // TODO: report err to cloud (ELK)
     } else {
-      console.log(err);
+      console.log(err.stack);
     }
   });
 

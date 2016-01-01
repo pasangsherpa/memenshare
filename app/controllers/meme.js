@@ -50,11 +50,13 @@ exports.createMeme = co.wrap(function* (ctx, next) {
   ctx.assert(body, 400, 'The body is empty');
 
   try {
-    let data = JSON.parse(body);
+    let json = JSON.parse(body);
+    let data = yield Serializer.deSerializeMeme(json);
     let meme = yield Meme.create(data);
 
     // set Location header
     ctx.set('Location', utils.generateResourceUrl('memes', meme.id));
+    ctx.body = Serializer.serializeMeme(meme);
     ctx.status = 201;
   } catch (err) {
     utils.formatError(err);
@@ -74,7 +76,8 @@ exports.updateMeme = co.wrap(function* (ctx, next) {
   ctx.assert(body, 400, 'The body is empty');
 
   try {
-    let data = JSON.parse(body);
+    let json = JSON.parse(body);
+    let data = yield Serializer.deSerializeMeme(json);
     let meme = yield Meme.findByIdAndUpdate(id, data);
     ctx.assert(meme, 404, 'Meme not found');
 
