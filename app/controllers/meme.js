@@ -95,7 +95,7 @@ exports.deleteMeme = co.wrap(function* (ctx, next) {
   ctx.assert(utils.isValidId(id), 404, 'Meme not found');
 
   try {
-    let meme = yield memeAdapter.findByIdAndRemove(id);
+    let meme = yield memeAdapter.delete(id);
     ctx.assert(meme, 404, 'Meme not found');
 
     ctx.status = 200;

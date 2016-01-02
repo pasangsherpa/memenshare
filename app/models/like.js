@@ -4,6 +4,7 @@
  * Module dependecies.
  */
 
+const mongoose = require('mongoose');
 const ModelFactory = require('lib/modelFactory');
 const config = require('config');
 const API = config.get('API.url');
@@ -12,23 +13,23 @@ const API = config.get('API.url');
  * Variables
  */
 
-const modelName = 'Meme';
-const collectionName = 'memes';
+const modelName = 'Like';
+const collectionName = 'likes';
 
 /**
- * Meme Schema
+ * Like Schema
  */
 
 let schema = {
-  title: {
-    type: String,
+  meme: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'MemeSchema',
     required: true
   },
   author: {
     type: String,
     required: true
-  },
-  tags: [String]
+  }
 };
 
 /**
@@ -44,11 +45,12 @@ let jsonApiSchema = {
     self: function (data) {
       return `${API}/${collectionName}/${data._id}`
     }
-  }
+  },
+  attributes: ['meme', 'author']
 }
 
 /**
- * Create Meme model
+ * Create Like model
  */
 
 new ModelFactory().create({
