@@ -34,8 +34,8 @@ exports.getMemeById = co.wrap(function* (ctx, next) {
 
   try {
     let meme = yield memeAdapter.findById(id);
-
     ctx.assert(meme, 404, 'Meme not found');
+
     ctx.body = meme;
   } catch (err) {
     ctx.throw(err);
@@ -80,7 +80,7 @@ exports.updateMeme = co.wrap(function* (ctx, next) {
     let meme = yield memeAdapter.findByIdAndUpdate(id, data);
     ctx.assert(meme, 404, 'Meme not found');
 
-    ctx.status = 200;
+    ctx.body = meme;
   } catch (err) {
     ctx.throw(err);
   }
@@ -97,8 +97,6 @@ exports.deleteMeme = co.wrap(function* (ctx, next) {
   try {
     let meme = yield memeAdapter.delete(id);
     ctx.assert(meme, 404, 'Meme not found');
-
-    ctx.status = 200;
   } catch (err) {
     ctx.throw(err);
   }
