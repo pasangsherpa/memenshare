@@ -5,13 +5,22 @@
  */
 
 const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
+const config = require('config');
+const API = config.get('API.url');
+const BaseSchema = require('./base');
+
+/**
+ * Variables
+ */
+
+const modelName = 'Meme';
+const collectionName = 'memes';
 
 /**
  * Schema
  */
 
-let memeSchema = new Schema({
+let memeSchema = new BaseSchema({
   title: {
     type: String,
     required: true
@@ -20,48 +29,47 @@ let memeSchema = new Schema({
     type: String,
     required: true
   },
-  createdAt: Date,
-  updatedAt: Date,
-  meta: {
-    likes: {
-      type: Number,
-      default: 0
-    }
-  },
   tags: [String]
 });
 
 /**
- * toJSON method.
+ * Utility function to return schema info
  */
 
-memeSchema.method('toJSON', function () {
-  let meme = this.toObject();
-  meme.id = meme._id;
-  delete meme._id;
-  delete meme.__v;
-  return meme;
-});
+memeSchema.methods.getInfo = () => {
+  return {
+    modelName: modelName,
+    collectionName: collectionName
+  }
+}
 
 /**
- * Pre save hook.
+ * Get JSON API schema
+ *
+ * https://github.com/SeyZ/jsonapi-serializer#documentation
  */
 
-memeSchema.pre('save', function (next) {
-  this.createdAt = this.createdAt || Date.now();
-  this.updatedAt = Date.now();
-  next();
-});
+memeSchema.methods.getJSONAPISchema = function() {
+  return Object.assign(jsonApiSchema, this.getBaseJSONAPISchema());
+}
 
 /**
- * Pre findOneAndUpdate hook.
+ * Schema used for serializing model to JSON API spec compliant
+ *
+ * https://github.com/SeyZ/jsonapi-serializer#documentation
  */
 
-memeSchema.pre('findOneAndUpdate', function () {
-  this.findOneAndUpdate({}, {
-    updatedAt: Date.now()
-  });
-});
+let jsonApiSchema = {
+  topLevelLinks: {
+    self: `${API}/${collectionName}`.toLowerCase()
+  },
+  dataLinks: {
+    self: function (data) {
+      return `${API}/${collectionName}/${data._id}`
+    }
+  },
+  attributes: ['title', 'author', 'createdAt', 'updatedAt']
+}
 
 // model creation
-mongoose.model('Meme', memeSchema, 'Memes');
+mongoose.model(modelName, memeSchema, collectionName);

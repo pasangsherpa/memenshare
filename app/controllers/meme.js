@@ -8,7 +8,8 @@ const co = require('co');
 const utils = require('lib/utils');
 const mongoose = require('mongoose');
 const Meme = mongoose.model('Meme');
-const Serializer = require('lib/serializer');
+const Adapter = require('lib/adapter');
+const memeAdapter = new Adapter(Meme);
 
 /**
  * Get all memes.
@@ -16,8 +17,8 @@ const Serializer = require('lib/serializer');
 
 exports.getMemes = co.wrap(function* (ctx, next) {
   try {
-    let memes = yield Meme.find().lean().exec();
-    ctx.body = Serializer.serializeMeme(memes);
+    let memes = yield memeAdapter.find();
+    ctx.body = memes;
   } catch (err) {
     ctx.throw(err);
   }
@@ -29,13 +30,13 @@ exports.getMemes = co.wrap(function* (ctx, next) {
 
 exports.getMemeById = co.wrap(function* (ctx, next) {
   let id = ctx.params.id;
-  ctx.assert(mongoose.Types.ObjectId.isValid(id), 404, 'Meme not found');
+  ctx.assert(utils.isValidId(id), 404, 'Meme not found');
 
   try {
-    let meme = yield Meme.findById(id).lean().exec();
+    let meme = yield memeAdapter.findById(id);
 
     ctx.assert(meme, 404, 'Meme not found');
-    ctx.body = Serializer.serializeMeme(meme);
+    ctx.body = meme;
   } catch (err) {
     ctx.throw(err);
   }
@@ -50,13 +51,12 @@ exports.createMeme = co.wrap(function* (ctx, next) {
   ctx.assert(body, 400, 'The body is empty');
 
   try {
-    let json = JSON.parse(body);
-    let data = yield Serializer.deSerializeMeme(json);
-    let meme = yield Meme.create(data);
+    let data = JSON.parse(body);
+    let meme = yield memeAdapter.create(data);
 
     // set Location header
     ctx.set('Location', utils.generateResourceUrl('memes', meme.id));
-    ctx.body = Serializer.serializeMeme(meme);
+    ctx.body = meme;
     ctx.status = 201;
   } catch (err) {
     utils.formatError(err);
@@ -70,15 +70,14 @@ exports.createMeme = co.wrap(function* (ctx, next) {
 
 exports.updateMeme = co.wrap(function* (ctx, next) {
   let id = ctx.params.id;
-  ctx.assert(mongoose.Types.ObjectId.isValid(id), 404, 'Meme not found');
+  ctx.assert(utils.isValidId(id), 404, 'Meme not found');
 
   let body = ctx.request.body;
   ctx.assert(body, 400, 'The body is empty');
 
   try {
-    let json = JSON.parse(body);
-    let data = yield Serializer.deSerializeMeme(json);
-    let meme = yield Meme.findByIdAndUpdate(id, data);
+    let data = JSON.parse(body);
+    let meme = yield memeAdapter.findByIdAndUpdate(id, data);
     ctx.assert(meme, 404, 'Meme not found');
 
     ctx.status = 200;
@@ -93,10 +92,10 @@ exports.updateMeme = co.wrap(function* (ctx, next) {
 
 exports.deleteMeme = co.wrap(function* (ctx, next) {
   let id = ctx.params.id;
-  ctx.assert(mongoose.Types.ObjectId.isValid(id), 404, 'Meme not found');
+  ctx.assert(utils.isValidId(id), 404, 'Meme not found');
 
   try {
-    let meme = yield Meme.findByIdAndRemove(id);
+    let meme = yield memeAdapter.findByIdAndRemove(id);
     ctx.assert(meme, 404, 'Meme not found');
 
     ctx.status = 200;
