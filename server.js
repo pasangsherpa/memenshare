@@ -51,7 +51,7 @@ function setupMiddlewares() {
   app.use(convert(error()));
 
   // routing
-  let api = require('app/routes/api');
+  let api = require('src/routes/api');
   app.use(api.routes());
 }
 
@@ -65,7 +65,7 @@ co(function* init() {
   yield connect(dbUrl);
 
   // load db models
-  requireDir(module, './app/models');
+  requireDir(module, './src/models');
 
   setupMiddlewares();
 }).then(() => {

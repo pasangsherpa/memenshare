@@ -10,7 +10,7 @@ const Router = require('koa-router');
  * Load controllers.
  */
 
-const memeController = require('app/controllers/meme');
+const memeController = require('src/controllers/meme');
 
 /**
  * Create memes router.

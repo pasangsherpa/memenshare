@@ -30,7 +30,7 @@ exports.getMemes = co.wrap(function* (ctx, next) {
 
 exports.getMemeById = co.wrap(function* (ctx, next) {
   let id = ctx.params.id;
-  ctx.assert(utils.isValidId(id), 404, 'Meme not found');
+  ctx.assert(utils.isValidId(id), 404, 'Invalid meme id');
 
   try {
     let meme = yield memeAdapter.findById(id);
@@ -51,7 +51,7 @@ exports.createMeme = co.wrap(function* (ctx, next) {
   ctx.assert(body, 400, 'The body is empty');
 
   try {
-    let data = JSON.parse(body);
+    let data = utils.jsonParse(body);
     let meme = yield memeAdapter.create(data);
 
     // set Location header
@@ -70,13 +70,13 @@ exports.createMeme = co.wrap(function* (ctx, next) {
 
 exports.updateMeme = co.wrap(function* (ctx, next) {
   let id = ctx.params.id;
-  ctx.assert(utils.isValidId(id), 404, 'Meme not found');
+  ctx.assert(utils.isValidId(id), 404, 'Invalid meme id');
 
   let body = ctx.request.body;
   ctx.assert(body, 400, 'The body is empty');
 
   try {
-    let data = JSON.parse(body);
+    let data = utils.jsonParse(body);
     let meme = yield memeAdapter.findByIdAndUpdate(id, data);
     ctx.assert(meme, 404, 'Meme not found');
 
@@ -92,7 +92,7 @@ exports.updateMeme = co.wrap(function* (ctx, next) {
 
 exports.deleteMeme = co.wrap(function* (ctx, next) {
   let id = ctx.params.id;
-  ctx.assert(utils.isValidId(id), 404, 'Meme not found');
+  ctx.assert(utils.isValidId(id), 404, 'Invalid meme id');
 
   try {
     let meme = yield memeAdapter.delete(id);
