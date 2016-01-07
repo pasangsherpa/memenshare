@@ -5,19 +5,21 @@
  */
 
 const co = require('co');
-const utils = require('lib/utils');
 const mongoose = require('mongoose');
-const Meme = mongoose.model('Meme');
+const utils = require('lib/utils');
 const Adapter = require('lib/adapter');
+const Meme = mongoose.model('Meme');
 const memeAdapter = new Adapter(Meme);
 
 /**
  * Get all memes.
+ * /api/memes?limit=10&select=author,title&sort=-author,title
  */
 
 exports.getMemes = co.wrap(function* (ctx, next) {
   try {
-    let memes = yield memeAdapter.find();
+    let opts = utils.convertToDbParams(ctx.query);
+    let memes = yield memeAdapter.find(opts);
     ctx.body = memes;
   } catch (err) {
     ctx.throw(err);
