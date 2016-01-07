@@ -49,7 +49,7 @@ function BaseSchema() {
 
   this.pre('save', function (next) {
     this.createdAt = this.createdAt || Date.now();
-    this.updatedAt = Date.now();
+    this.updatedAt = this.createdAt;
     next();
   });
 
