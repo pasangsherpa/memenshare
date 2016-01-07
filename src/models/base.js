@@ -15,7 +15,7 @@ function BaseSchema() {
   Schema.apply(this, arguments);
 
   this.add({
-    updatedAt: String,
+    updatedAt: Date,
     createdAt: Date
   });
 
