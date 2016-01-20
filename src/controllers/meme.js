@@ -5,9 +5,9 @@
  */
 
 const co = require('co');
-const mongoose = require('mongoose');
 const utils = require('lib/utils');
 const Adapter = require('lib/adapter');
+const mongoose = require('mongoose');
 const Meme = mongoose.model('Meme');
 const memeAdapter = new Adapter(Meme);
 

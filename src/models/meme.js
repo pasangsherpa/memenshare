@@ -4,8 +4,8 @@
  * Module dependecies.
  */
 
-const ModelFactory = require('lib/modelFactory');
 const config = require('config');
+const ModelFactory = require('lib/modelFactory');
 const API = config.get('API.url');
 
 /**
