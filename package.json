@@ -13,8 +13,10 @@
   "dependencies": {
     "app-module-path": "^1.0.5",
     "co": "^4.6.0",
+    "co-views": "^2.1.0",
     "config": "^1.17.1",
     "jsonapi-serializer": "SeyZ/jsonapi-serializer.git#deserializer",
+    "kerberos": "0.0.18",
     "koa": "^2.0.0-alpha.3",
     "koa-body": "^1.4.0",
     "koa-compress": "^1.0.8",

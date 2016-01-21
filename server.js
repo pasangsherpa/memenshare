@@ -10,15 +10,16 @@ require('app-module-path').addPath(__dirname);
 /**
  * Module dependencies.
  */
+const requireDir = require('require-directory');
 const config = require('config');
 const convert = require('koa-convert');
 const bodyParser = require('koa-body');
 const compress = require('koa-compress');
 const error = require('koa-error');
-const requireDir = require('require-directory');
 const mongoose = require('mongoose');
 const thunkify = require('thunkify');
 const logger = require('lib/logger');
+const fs = require('fs');
 const co = require('co');
 const Koa = require('koa');
 const app = new Koa();
@@ -36,6 +37,7 @@ let dbUrl = config.get('DB.url');
  */
 
 function setupMiddlewares() {
+
   // logging
   if (env !== 'production') {
     app.use(logger());
@@ -51,8 +53,9 @@ function setupMiddlewares() {
   app.use(convert(error()));
 
   // routing
-  let api = require('src/routes/api');
-  app.use(api.routes());
+  let router = require('src/routes/');
+  app.use(router.routes());
+
 }
 
 /**
