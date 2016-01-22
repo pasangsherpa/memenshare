@@ -37,7 +37,7 @@ let router = new Router();
 router.get('/', co.wrap(function* (ctx, next) {
   let top = ctx.query['top-text'] || '';
   let bottom = ctx.query['bottom-text'] || '';
-  let image = 'https://houseofgeekery.files.wordpress.com/2012/08/jackie-chan-whut.jpg'
+  let image = ctx.query['image'] || '';
   ctx.body = yield render('index', {
     top: top.toUpperCase(),
     image: image,
