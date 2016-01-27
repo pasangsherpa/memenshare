@@ -67,7 +67,7 @@ paths:
             $ref: '#/definitions/Errors'
   /memes/{id}:
     get:
-      description: Returns a user based on a single ID, if the user does not have access to the meme
+      description: Returns a single meme based on the ID supplied
       operationId: find meme by id
       parameters:
         - name: id
@@ -102,6 +102,7 @@ paths:
           description: unexpected error
           schema:
             $ref: '#/definitions/Errors'
+
 definitions:
   Meme:
     type: object
