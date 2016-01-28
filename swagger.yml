@@ -10,11 +10,14 @@ host: memenshare.herokuapp.com
 basePath: /api
 schemes:
   - http
+  - https
 consumes:
   - application/json
 produces:
   - application/json
-
+tags:
+- name: meme
+  description: Meme CRUD
 parameters:
   sort:
     name: sort
@@ -54,20 +57,7 @@ paths:
         Returns all memes from the system
       operationId: findMemes
       parameters:
-        - name: tags
-          in: query
-          description: tags to filter by
-          required: false
-          type: array
-          collectionFormat: csv
-          items:
-            type: string
-        - name: limit
-          in: query
-          description: maximum number of results to return
-          required: false
-          type: integer
-          format: int32
+        - $ref: '#/parameters/sort'
       responses:
         200:
           description: meme response
