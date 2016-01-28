@@ -148,6 +148,8 @@ definitions:
     required:
       - type
       - id
+      - attributes
+      - links
     properties:
       type:
         type: string
