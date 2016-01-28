@@ -79,13 +79,13 @@ paths:
               data:
                 type: array
                 items:
-                  $ref: '#/definitions/Meme'
+                  $ref: '#/definitions/ExtendedMeme'
         default:
           description: unexpected error
           schema:
             $ref: '#/definitions/Errors'
     post:
-      description: Creates a new meme in the store.  Duplicates are allowed
+      description: Creates a new meme in the store
       operationId: addMeme
       parameters:
         - name: meme
@@ -119,7 +119,7 @@ paths:
         200:
           description: meme response
           schema:
-            $ref: '#/definitions/Meme'
+            $ref: '#/definitions/ExtendedMeme'
         default:
           description: unexpected error
           schema:
@@ -147,18 +147,29 @@ definitions:
     type: object
     required:
       - type
-      - id
       - attributes
       - links
     properties:
       type:
         type: string
-      id:
-        type: string
       links:
         $ref: '#/definitions/Links'
       attributes:
         type: object
+        properties:
+          title:
+            type: string
+          author:
+            type: string
+          tags:
+            type: array
+            items:
+              type: string
+
+  ExtendedMeme:
+    allOf:
+      - $ref: '#/definitions/Meme'
+      - type: object
         properties:
           id:
             type: string
@@ -168,14 +179,7 @@ definitions:
           createdAt:
             type: string
             format: date
-          title:
-            type: string
-          author:
-            type: string
-          tags:
-            type: array
-            items:
-              type: string
+
   Errors:
     type: object
     properties:
