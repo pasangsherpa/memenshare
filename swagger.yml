@@ -170,8 +170,9 @@ definitions:
         items:
           type: string
 
-  ExtendedMeme:
-    type: object
+  ExtendedMemeAttributes:
+    allOf:
+    - $ref: '#/definitions/MemeAttributes'
     properties:
       id:
         type: string
@@ -181,8 +182,23 @@ definitions:
       createdAt:
         type: string
         format: date
-      additionalProperties:
-        $ref: '#/definitions/Meme'
+
+  ExtendedMeme:
+    type: object
+    required:
+      - type
+      - attributes
+      - links
+    properties:
+      id:
+        type: string
+      type:
+        type: string
+      links:
+        $ref: '#/definitions/Links'
+      attributes:
+        type: object
+        $ref: '#/definitions/ExtendedMemeAttributes'
 
   Errors:
     type: object
