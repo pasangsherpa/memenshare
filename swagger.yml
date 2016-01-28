@@ -152,8 +152,6 @@ definitions:
     properties:
       type:
         type: string
-      links:
-        $ref: '#/definitions/Links'
       attributes:
         type: object
         $ref: '#/definitions/MemeAttributes'
