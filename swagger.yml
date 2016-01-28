@@ -72,9 +72,14 @@ paths:
         200:
           description: meme response
           schema:
-            type: array
-            items:
-              $ref: '#/definitions/Meme'
+            type: object
+            properties:
+              links:
+                $ref: '#/definitions/Links'
+              data:
+                type: array
+                items:
+                  $ref: '#/definitions/Meme'
         default:
           description: unexpected error
           schema:
@@ -140,38 +145,35 @@ paths:
 definitions:
   Meme:
     type: object
+    required:
+      - type
+      - id
     properties:
+      type:
+        type: string
+      id:
+        type: string
       links:
         $ref: '#/definitions/Links'
-      data:
+      attributes:
         type: object
-        required:
-          - type
-          - id
         properties:
-          type:
-            type: string
           id:
             type: string
-          links:
-            $ref: '#/definitions/Links'
-          attributes:
-            type: object
-            properties:
-              id:
-                type: string
-              updatedAt:
-                type: Date
-              createdAt:
-                type: Date
-              title:
-                type: string
-              author:
-                type: string
-              tags:
-                type: array
-                items:
-                  type: string
+          updatedAt:
+            type: string
+            format: date
+          createdAt:
+            type: string
+            format: date
+          title:
+            type: string
+          author:
+            type: string
+          tags:
+            type: array
+            items:
+              type: string
   Errors:
     type: object
     properties:
@@ -196,6 +198,8 @@ definitions:
 
   Links:
     type: object
+    required:
+      - self
     properties:
       self:
         type: string
