@@ -98,6 +98,7 @@ paths:
           description: unexpected error
           schema:
             $ref: '#/definitions/Errors'
+
   /memes/{id}:
     get:
       description: Returns a single meme based on the ID supplied
@@ -140,15 +141,8 @@ definitions:
   Meme:
     type: object
     properties:
-      meta:
-        type: object
       links:
-        type: object
-        properties:
-          self:
-            type: string
-          related:
-            type: string
+        $ref: '#/definitions/Links'
       data:
         type: object
         required:
@@ -159,9 +153,32 @@ definitions:
             type: string
           id:
             type: string
-          meta:
+          links:
+            $ref: '#/definitions/Links'
+          attributes:
             type: object
-
+            properties:
+              id:
+                type: string
+              updatedAt:
+                type: Date
+              createdAt:
+                type: Date
+              title:
+                type: string
+              author:
+                type: string
+              tags:
+                type: array
+                items:
+                  type: string
+  Errors:
+    type: object
+    properties:
+      errors:
+        type: array
+        items:
+          $ref: '#/definitions/Error'
 
   Error:
     type: object
@@ -177,10 +194,8 @@ definitions:
       detail:
         type: string
 
-  Errors:
+  Links:
     type: object
     properties:
-      errors:
-        type: array
-        items:
-          $ref: '#/definitions/Error'
+      self:
+        type: string
