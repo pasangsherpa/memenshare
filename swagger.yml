@@ -88,7 +88,11 @@ paths:
         200:
           description: meme response
           schema:
-            $ref: '#/definitions/Meme'
+            type: object
+            properties:
+              data:
+                type: object
+                $ref: '#/definitions/Meme'
         default:
           description: unexpected error
           schema:
@@ -109,7 +113,13 @@ paths:
         200:
           description: meme response
           schema:
-            $ref: '#/definitions/ExtendedMeme'
+            type: object
+            properties:
+              links:
+                $ref: '#/definitions/Links'
+              data:
+                type: object
+                $ref: '#/definitions/ExtendedMeme'
         default:
           description: unexpected error
           schema:
