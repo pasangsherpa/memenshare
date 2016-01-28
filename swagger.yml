@@ -156,29 +156,26 @@ definitions:
         $ref: '#/definitions/Links'
       attributes:
         type: object
-        properties:
-          title:
-            type: string
-          author:
-            type: string
-          tags:
-            type: array
-            items:
-              type: string
+        $ref: '#/definitions/MemeAttributes'
+
+  MemeAttributes:
+    type: object
+    properties:
+      title:
+        type: string
+      author:
+        type: string
+      tags:
+        type: array
+        items:
+          type: string
 
   ExtendedMeme:
     allOf:
       - $ref: '#/definitions/Meme'
-      - type: object
-        properties:
-          id:
-            type: string
-          updatedAt:
-            type: string
-            format: date
-          createdAt:
-            type: string
-            format: date
+    properties:
+      id:
+        type: string
 
   Errors:
     type: object
