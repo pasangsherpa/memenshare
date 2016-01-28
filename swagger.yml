@@ -171,11 +171,18 @@ definitions:
           type: string
 
   ExtendedMeme:
-    allOf:
-      - $ref: '#/definitions/Meme'
+    type: object
     properties:
       id:
         type: string
+      updatedAt:
+        type: string
+        format: date
+      createdAt:
+        type: string
+        format: date
+      additionalProperties:
+        $ref: '#/definitions/Meme'
 
   Errors:
     type: object
