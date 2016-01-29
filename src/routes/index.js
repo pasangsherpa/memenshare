@@ -52,6 +52,12 @@ router.get('/', co.wrap(function* (ctx, next) {
 router.use(api.routes());
 
 /**
+ * Respond to OPTIONS requests.
+ */
+
+router.use(api.allowedMethods());
+
+/**
  * Expose `router`.
  */
 
