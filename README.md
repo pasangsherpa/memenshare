@@ -1,5 +1,5 @@
 # memenshare
-App to create and share meme.
+App to create and share meme
 
 ## REST API
 
