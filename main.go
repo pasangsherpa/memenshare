@@ -1,13 +1,40 @@
 package main
 
 import (
+	"net/http"
 	"os"
 
-	"github.com/pasangsherpa/memenshare/api"
-	_ "github.com/pasangsherpa/memenshare/api/v1/status"
+	"github.com/gin-gonic/gin"
 )
 
+/**
+ * Handler to handle request to index route
+ */
+func index(c *gin.Context) {
+	c.String(http.StatusOK, "Welcome")
+}
+
+/**
+ * Handler to handle service healthcheck
+ */
+func pong(c *gin.Context) {
+	c.JSON(http.StatusOK, gin.H{
+		"message": "pong",
+	})
+}
+
+/**
+ * Main function
+ */
 func main() {
-	app := api.New()
-	app.Router.Run(":" + os.Getenv("PORT"))
+
+	// Creates a gin router with logger and
+	// recovery (crash-free) middlewares
+	app := gin.Default()
+
+	app.GET("/", index)
+	app.GET("/ping", pong)
+
+	// Start listening in given port
+	app.Run(":" + os.Getenv("PORT"))
 }
