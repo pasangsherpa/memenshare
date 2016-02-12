@@ -45,6 +45,7 @@ func main() {
 
 	app.GET("/", index)
 	app.GET("/ping", pong)
+	app.GET("/memes/", mc.GetMemes)
 	app.GET("/memes/:id", mc.GetMeme)
 
 	// Start listening in given port

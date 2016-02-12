@@ -21,6 +21,21 @@ func NewMemeController(c *mgo.Collection) *MemeController {
 	return &MemeController{c}
 }
 
+func (mc MemeController) GetMemes(c *gin.Context) {
+	// stub meme collection
+	var results []models.Meme
+
+	// fetch meme collection
+	if err := mc.collection.Find(nil).All(&results); err != nil {
+		c.JSON(http.StatusNotFound, err)
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"data": results,
+	})
+}
+
 func (mc MemeController) GetMeme(c *gin.Context) {
 	// grab id from url param
 	id := c.Params.ByName("id")
