@@ -1,6 +1,10 @@
 package controllers
 
 import (
+	"encoding/json"
+	"net/http"
+
+	"github.com/gin-gonic/gin"
 	"github.com/pasangsherpa/memenshare/models"
 	"gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
@@ -18,13 +22,33 @@ func NewMemeController(c *mgo.Collection) *MemeController {
 	return &MemeController{c}
 }
 
-func (mc MemeController) GetMemes() (*models.Meme, error) {
-	result := models.Meme{}
-	err := mc.collection.Find(bson.M{}).One(&result)
+func (mc MemeController) GetMeme(c *gin.Context) {
 
-	if err != nil {
-		return nil, err
+	// grab id from url param
+	id := c.Params.ByName("id")
+
+	// verify id is ObjectId, otherwise bail
+	if !bson.IsObjectIdHex(id) {
+		c.JSON(http.StatusNotFound, gin.H{
+			"code":    "INVALID_ID",
+			"message": "Invalid id",
+		})
+		return
 	}
 
-	return result, nil
+	// stub meme
+	result := models.Meme{}
+
+	// fetch meme
+	if err := mc.collection.Find(bson.M{}).One(&result); err != nil {
+		c.JSON(http.StatusNotFound, err)
+		return
+	}
+
+	// marshal provided interface into JSON structure
+	json, _ := json.Marshal(result)
+
+	c.JSON(http.StatusOK, gin.H{
+		"data": json,
+	})
 }

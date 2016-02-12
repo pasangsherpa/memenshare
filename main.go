@@ -5,6 +5,7 @@ import (
 	"os"
 
 	"github.com/gin-gonic/gin"
+	"github.com/pasangsherpa/memenshare/controllers"
 	"github.com/pasangsherpa/memenshare/utils"
 )
 
@@ -34,13 +35,15 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	c := db.C("memes")
+
+	// Get a UserController instance
+	mc := controllers.NewMemeController(db.C("memes"))
 
 	// Creates a gin router with logger and
 	// recovery (crash-free) middlewares
 	app := gin.Default()
 
-	app.GET("/", index)
+	app.GET("/", mc.GetMeme)
 	app.GET("/ping", pong)
 
 	// Start listening in given port
