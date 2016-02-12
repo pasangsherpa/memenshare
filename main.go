@@ -4,28 +4,15 @@ import (
 	"net/http"
 	"os"
 
-	"gopkg.in/mgo.v2"
-	"gopkg.in/mgo.v2/bson"
-
 	"github.com/gin-gonic/gin"
-	"github.com/pasangsherpa/memenshare/models"
 	"github.com/pasangsherpa/memenshare/utils"
 )
-
-var db *mgo.Database
 
 /**
  * Handler to handle request to index route
  */
 func index(c *gin.Context) {
-
-	result := models.Meme{}
-	err := db.C("memes").Find(bson.M{}).One(&result)
-	if err != nil {
-		panic(err)
-	}
-
-	c.String(http.StatusOK, "Welcome: "+result.Author)
+	c.String(http.StatusOK, "Welcome: ")
 }
 
 /**
@@ -42,7 +29,12 @@ func pong(c *gin.Context) {
  */
 func main() {
 
-	db = utils.DB("localhost:27017", "memenshare")
+	db, err := utils.DB("localhost:27017", "memenshare")
+
+	if err != nil {
+		panic(err)
+	}
+	c := db.C("memes")
 
 	// Creates a gin router with logger and
 	// recovery (crash-free) middlewares

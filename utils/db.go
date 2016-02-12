@@ -2,12 +2,12 @@ package utils
 
 import "gopkg.in/mgo.v2"
 
-func DB(url, db string) *mgo.Database {
+func DB(url, db string) (*mgo.Database, error) {
 	session, err := mgo.Dial(url)
 
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
 
-	return session.DB(db)
+	return session.DB(db), nil
 }
