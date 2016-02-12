@@ -43,8 +43,9 @@ func main() {
 	// recovery (crash-free) middlewares
 	app := gin.Default()
 
-	app.GET("/", mc.GetMeme)
+	app.GET("/", index)
 	app.GET("/ping", pong)
+	app.GET("/memes/:id", mc.GetMeme)
 
 	// Start listening in given port
 	app.Run(":" + os.Getenv("PORT"))

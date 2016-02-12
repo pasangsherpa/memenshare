@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"encoding/json"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -23,7 +22,6 @@ func NewMemeController(c *mgo.Collection) *MemeController {
 }
 
 func (mc MemeController) GetMeme(c *gin.Context) {
-
 	// grab id from url param
 	id := c.Params.ByName("id")
 
@@ -40,15 +38,12 @@ func (mc MemeController) GetMeme(c *gin.Context) {
 	result := models.Meme{}
 
 	// fetch meme
-	if err := mc.collection.Find(bson.M{}).One(&result); err != nil {
+	if err := mc.collection.FindId(bson.ObjectIdHex(id)).One(&result); err != nil {
 		c.JSON(http.StatusNotFound, err)
 		return
 	}
 
-	// marshal provided interface into JSON structure
-	json, _ := json.Marshal(result)
-
 	c.JSON(http.StatusOK, gin.H{
-		"data": json,
+		"data": result,
 	})
 }
