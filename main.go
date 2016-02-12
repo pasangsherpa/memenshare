@@ -36,7 +36,7 @@ func main() {
 		panic(err)
 	}
 
-	// Get a UserController instance
+	// Get a MemeController instance
 	mc := controllers.NewMemeController(db.C("memes"))
 
 	// Creates a gin router with logger and
