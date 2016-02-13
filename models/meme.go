@@ -4,8 +4,9 @@ import "gopkg.in/mgo.v2/bson"
 
 type (
 	Meme struct {
-		Id     bson.ObjectId `json:"id" bson:"_id"`
-		Title  string        `json:"title" bson:"title"`
-		Author string        `json:"author" bson:"author"`
+		Id     bson.ObjectId `jsonapi:"primary,memes"`
+		Title  string        `jsonapi:"attr,title"`
+		Author string        `jsonapi:"attr,author"`
+		Tags   []string      `jsonapi:"attr,tags"`
 	}
 )

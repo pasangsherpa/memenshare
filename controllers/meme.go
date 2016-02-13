@@ -23,17 +23,17 @@ func NewMemeController(c *mgo.Collection) *MemeController {
 
 func (mc MemeController) GetMemes(c *gin.Context) {
 	// stub meme collection
-	var results []models.Meme
+	var models []models.Meme
 
 	// fetch meme collection
-	if err := mc.collection.Find(nil).All(&results); err != nil {
+	if err := mc.collection.Find(nil).All(&models); err != nil {
 		c.JSON(http.StatusNotFound, err)
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{
-		"data": results,
-	})
+	// data, _ := jsonapi.MarshalOne(models)
+
+	c.JSON(http.StatusOK, models)
 }
 
 func (mc MemeController) GetMeme(c *gin.Context) {
@@ -50,15 +50,19 @@ func (mc MemeController) GetMeme(c *gin.Context) {
 	}
 
 	// stub meme
-	result := models.Meme{}
+	model := models.Meme{}
 
 	// fetch meme
-	if err := mc.collection.FindId(bson.ObjectIdHex(id)).One(&result); err != nil {
+	if err := mc.collection.FindId(bson.ObjectIdHex(id)).One(&model); err != nil {
 		c.JSON(http.StatusNotFound, err)
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{
-		"data": result,
-	})
+	// payload, err := jsonapi.MarshalOne(model)
+	// if err != nil {
+	// 	c.JSON(http.StatusNotFound, err)
+	// 	return
+	// }
+
+	c.JSON(http.StatusOK, model)
 }
