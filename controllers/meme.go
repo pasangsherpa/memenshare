@@ -1,10 +1,12 @@
 package controllers
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
 	"github.com/pasangsherpa/memenshare/models"
+	"github.com/shwoodard/jsonapi"
 	"gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
 )
@@ -58,11 +60,13 @@ func (mc MemeController) GetMeme(c *gin.Context) {
 		return
 	}
 
-	// payload, err := jsonapi.MarshalOne(model)
-	// if err != nil {
-	// 	c.JSON(http.StatusNotFound, err)
-	// 	return
-	// }
+	fmt.Printf("%+v\n", model)
 
-	c.JSON(http.StatusOK, model)
+	payload, err := jsonapi.MarshalOne(model)
+	if err != nil {
+		c.JSON(http.StatusNotFound, err)
+		return
+	}
+
+	c.JSON(http.StatusOK, payload)
 }
