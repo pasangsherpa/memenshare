@@ -4,11 +4,11 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/gin-gonic/gin"
+	"github.com/pasangsherpa/memenshare/Godeps/_workspace/src/github.com/gin-gonic/gin"
+	"github.com/pasangsherpa/memenshare/Godeps/_workspace/src/github.com/shwoodard/jsonapi"
+	"github.com/pasangsherpa/memenshare/Godeps/_workspace/src/gopkg.in/mgo.v2"
+	"github.com/pasangsherpa/memenshare/Godeps/_workspace/src/gopkg.in/mgo.v2/bson"
 	"github.com/pasangsherpa/memenshare/models"
-	"github.com/shwoodard/jsonapi"
-	"gopkg.in/mgo.v2"
-	"gopkg.in/mgo.v2/bson"
 )
 
 type (
@@ -32,8 +32,6 @@ func (mc MemeController) GetMemes(c *gin.Context) {
 		c.JSON(http.StatusNotFound, err)
 		return
 	}
-
-	// data, _ := jsonapi.MarshalOne(models)
 
 	c.JSON(http.StatusOK, models)
 }
