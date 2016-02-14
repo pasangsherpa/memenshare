@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/gin-gonic/gin"
+	"github.com/pasangsherpa/memenshare/Godeps/_workspace/src/github.com/gin-gonic/gin"
 	"github.com/pasangsherpa/memenshare/controllers"
 	"github.com/pasangsherpa/memenshare/utils"
 )
