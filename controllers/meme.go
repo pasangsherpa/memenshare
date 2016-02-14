@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/pasangsherpa/memenshare/Godeps/_workspace/src/github.com/gin-gonic/gin"
@@ -50,7 +49,7 @@ func (mc MemeController) GetMeme(c *gin.Context) {
 	}
 
 	// stub meme
-	model := models.Meme{}
+	model := new(models.Meme)
 
 	// fetch meme
 	if err := mc.collection.FindId(bson.ObjectIdHex(id)).One(&model); err != nil {
@@ -58,9 +57,8 @@ func (mc MemeController) GetMeme(c *gin.Context) {
 		return
 	}
 
-	fmt.Printf("%+v\n", model)
-
 	payload, err := jsonapi.MarshalOne(model)
+
 	if err != nil {
 		c.JSON(http.StatusNotFound, err)
 		return
