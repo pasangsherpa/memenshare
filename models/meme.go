@@ -1,8 +1,17 @@
 package models
 
+import (
+	"time"
+
+	"gopkg.in/mgo.v2/bson"
+)
+
 type Meme struct {
-	Id     string   `json:"id" bson:"_id" jsonapi:"primary,memes"`
-	Title  string   `json:"title" bson:"title" jsonapi:"attr,title"`
-	Author string   `json:"author" bson:"author" jsonapi:"attr,author"`
-	Tags   []string `json:"tags" bson:"tags" jsonapi:"attr,tags"`
+	Pid       string        `json:"-" jsonapi:"primary,memes"`
+	Id        bson.ObjectId `json:"id" bson:"_id" jsonapi:"attr,id"`
+	CreatedAt time.Time     `json:"createdAt" jsonapi:"attr,createdAt"`
+	UpdatedAt time.Time     `json:"updatedAt" jsonapi:"attr,updatedAt"`
+	Title     string        `json:"title" jsonapi:"attr,title"`
+	Author    string        `json:"author" jsonapi:"attr,author"`
+	Tags      []string      `json:"tags" jsonapi:"attr,tags"`
 }

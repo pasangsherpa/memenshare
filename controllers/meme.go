@@ -32,6 +32,14 @@ func (mc MemeController) GetMemes(c *gin.Context) {
 		return
 	}
 
+	// fmt.Printf("Models %+v\n", models)
+
+	c.Writer.Header().Set("Content-Type", "application/vnd.api+json")
+	// if err := jsonapi.MarshalManyPayload(c.Writer, interfaceSlice); err != nil {
+	// 	c.JSON(http.StatusInternalServerError, err)
+	// 	return
+	// }
+
 	c.JSON(http.StatusOK, models)
 }
 
@@ -57,12 +65,8 @@ func (mc MemeController) GetMeme(c *gin.Context) {
 		return
 	}
 
-	payload, err := jsonapi.MarshalOne(model)
-
-	if err != nil {
-		c.JSON(http.StatusNotFound, err)
-		return
+	c.Writer.Header().Set("Content-Type", "application/vnd.api+json")
+	if err := jsonapi.MarshalOnePayload(c.Writer, model); err != nil {
+		c.JSON(http.StatusInternalServerError, err)
 	}
-
-	c.JSON(http.StatusOK, payload)
 }
