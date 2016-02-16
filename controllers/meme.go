@@ -65,7 +65,7 @@ func (mc MemeController) GetMeme(c *gin.Context) {
 		return
 	}
 
-	// set primary id vaalue to use bson id
+	// set primary id value to use bson id
 	model.Id = model.Bid.Hex()
 
 	c.Writer.Header().Set("Content-Type", "application/vnd.api+json")
