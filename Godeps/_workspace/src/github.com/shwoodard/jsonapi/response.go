@@ -216,7 +216,7 @@ func visitModelNode(model interface{}, included *map[string]*Node, sideload bool
 					continue
 				}
 
-				node.Attributes[args[1]] = t.Unix()
+				node.Attributes[args[1]] = t
 			} else if fieldValue.Type() == reflect.TypeOf(new(time.Time)) {
 				// A time pointer may be nil
 				if fieldValue.IsNil() {
@@ -232,7 +232,7 @@ func visitModelNode(model interface{}, included *map[string]*Node, sideload bool
 						continue
 					}
 
-					node.Attributes[args[1]] = tm.Unix()
+					node.Attributes[args[1]] = tm
 				}
 			} else {
 				strAttr, ok := fieldValue.Interface().(string)

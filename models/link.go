@@ -1,5 +1,5 @@
 package models
 
 type Link struct {
-	Self string
+	Self string `json:"string"`
 }
