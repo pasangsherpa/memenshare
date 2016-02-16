@@ -24,7 +24,7 @@ func NewMemeController(c *mgo.Collection) *MemeController {
 
 func (mc MemeController) GetMemes(c *gin.Context) {
 	// stub meme collection
-	var models []models.Meme
+	models := make([]interface{}, 0)
 
 	// fetch meme collection
 	if err := mc.collection.Find(nil).All(&models); err != nil {
@@ -35,7 +35,7 @@ func (mc MemeController) GetMemes(c *gin.Context) {
 	// fmt.Printf("Models %+v\n", models)
 
 	c.Writer.Header().Set("Content-Type", "application/vnd.api+json")
-	// if err := jsonapi.MarshalManyPayload(c.Writer, interfaceSlice); err != nil {
+	// if err := jsonapi.MarshalManyPayload(c.Writer, models); err != nil {
 	// 	c.JSON(http.StatusInternalServerError, err)
 	// 	return
 	// }
@@ -64,6 +64,9 @@ func (mc MemeController) GetMeme(c *gin.Context) {
 		c.JSON(http.StatusNotFound, err)
 		return
 	}
+
+	// set primary id vaalue to use bson id
+	model.Id = model.Bid.Hex()
 
 	c.Writer.Header().Set("Content-Type", "application/vnd.api+json")
 	if err := jsonapi.MarshalOnePayload(c.Writer, model); err != nil {
