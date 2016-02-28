@@ -36,12 +36,12 @@ func (mc MemeController) GetMemes(c *gin.Context) {
 	// fmt.Printf("Models %+v\n", models)
 
 	c.Writer.Header().Set("Content-Type", "application/vnd.api+json")
-	if err := jsonapi.MarshalManyPayload(c.Writer, models); err != nil {
-		c.JSON(http.StatusInternalServerError, err)
-		return
-	}
+	// if err := jsonapi.MarshalManyPayload(c.Writer, models); err != nil {
+	// 	c.JSON(http.StatusInternalServerError, err)
+	// 	return
+	// }
 
-	// c.JSON(http.StatusOK, models)
+	c.JSON(http.StatusOK, models)
 }
 
 func (mc MemeController) GetMeme(c *gin.Context) {
