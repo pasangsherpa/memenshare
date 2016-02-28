@@ -24,24 +24,31 @@ func NewMemeController(c *mgo.Collection) *MemeController {
 
 func (mc MemeController) GetMemes(c *gin.Context) {
 	// stub meme collection
-	// models := make([]interface{}, 0)
-	var models []models.Meme
+	var memes []models.Meme
 
 	// fetch meme collection
-	if err := mc.collection.Find(nil).All(&models); err != nil {
+	if err := mc.collection.Find(nil).All(&memes); err != nil {
 		c.JSON(http.StatusNotFound, err)
 		return
 	}
 
-	// fmt.Printf("Models %+v\n", models)
+	memeInterface := make([]interface{}, len(memes))
+
+	for i, meme := range memes {
+		// set primary id value to use bson id
+		meme.Id = meme.Bid.Hex()
+		memeInterface[i] = meme
+	}
+
+	// fmt.Printf("Models %+v\n", memes)
 
 	c.Writer.Header().Set("Content-Type", "application/vnd.api+json")
-	// if err := jsonapi.MarshalManyPayload(c.Writer, models); err != nil {
+	// if err := jsonapi.MarshalManyPayload(c.Writer, memeInterface); err != nil {
 	// 	c.JSON(http.StatusInternalServerError, err)
 	// 	return
 	// }
 
-	c.JSON(http.StatusOK, models)
+	c.JSON(http.StatusOK, memeInterface)
 }
 
 func (mc MemeController) GetMeme(c *gin.Context) {
@@ -58,19 +65,19 @@ func (mc MemeController) GetMeme(c *gin.Context) {
 	}
 
 	// stub meme
-	model := new(models.Meme)
+	meme := new(models.Meme)
 
 	// fetch meme
-	if err := mc.collection.FindId(bson.ObjectIdHex(id)).One(&model); err != nil {
+	if err := mc.collection.FindId(bson.ObjectIdHex(id)).One(&meme); err != nil {
 		c.JSON(http.StatusNotFound, err)
 		return
 	}
 
 	// set primary id value to use bson id
-	model.Id = model.Bid.Hex()
+	meme.Id = meme.Bid.Hex()
 
 	c.Writer.Header().Set("Content-Type", "application/vnd.api+json")
-	if err := jsonapi.MarshalOnePayload(c.Writer, model); err != nil {
+	if err := jsonapi.MarshalOnePayload(c.Writer, meme); err != nil {
 		c.JSON(http.StatusInternalServerError, err)
 	}
 }
