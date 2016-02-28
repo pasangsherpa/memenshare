@@ -9,6 +9,8 @@ import (
 	"strconv"
 	"strings"
 	"time"
+
+	bson "github.com/pasangsherpa/memenshare/Godeps/_workspace/src/gopkg.in/mgo.v2/bson"
 )
 
 var (
@@ -175,7 +177,8 @@ func visitModelNode(model interface{}, included *map[string]*Node, sideload bool
 			break
 		}
 
-		if annotation == "primary" {
+		switch annotation {
+		case "primary":
 			id := fieldValue.Interface()
 
 			switch nId := id.(type) {
@@ -187,18 +190,20 @@ func visitModelNode(model interface{}, included *map[string]*Node, sideload bool
 				node.Id = strconv.FormatInt(nId, 10)
 			case uint64:
 				node.Id = strconv.FormatUint(nId, 10)
+			case bson.ObjectId:
+				node.Id = nId.Hex()
 			default:
 				er = ErrBadJSONAPIID
 				break
 			}
 
 			node.Type = args[1]
-		} else if annotation == "client-id" {
+		case "client-id":
 			clientID := fieldValue.String()
 			if clientID != "" {
 				node.ClientId = clientID
 			}
-		} else if annotation == "attr" {
+		case "attr":
 			var omitEmpty bool
 
 			if len(args) > 2 {
@@ -216,7 +221,7 @@ func visitModelNode(model interface{}, included *map[string]*Node, sideload bool
 					continue
 				}
 
-				node.Attributes[args[1]] = t
+				node.Attributes[args[1]] = t.Unix()
 			} else if fieldValue.Type() == reflect.TypeOf(new(time.Time)) {
 				// A time pointer may be nil
 				if fieldValue.IsNil() {
@@ -232,7 +237,7 @@ func visitModelNode(model interface{}, included *map[string]*Node, sideload bool
 						continue
 					}
 
-					node.Attributes[args[1]] = tm
+					node.Attributes[args[1]] = tm.Unix()
 				}
 			} else {
 				strAttr, ok := fieldValue.Interface().(string)
@@ -245,7 +250,7 @@ func visitModelNode(model interface{}, included *map[string]*Node, sideload bool
 					node.Attributes[args[1]] = fieldValue.Interface()
 				}
 			}
-		} else if annotation == "relation" {
+		case "relation":
 			isSlice := fieldValue.Type().Kind() == reflect.Slice
 
 			if (isSlice && fieldValue.Len() < 1) || (!isSlice && fieldValue.IsNil()) {
@@ -291,8 +296,7 @@ func visitModelNode(model interface{}, included *map[string]*Node, sideload bool
 					break
 				}
 			}
-
-		} else {
+		default:
 			er = ErrBadJSONAPIStructTag
 			break
 		}

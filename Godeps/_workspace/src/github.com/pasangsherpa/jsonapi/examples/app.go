@@ -12,7 +12,7 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/pasangsherpa/memenshare/Godeps/_workspace/src/github.com/shwoodard/jsonapi"
+	"github.com/shwoodard/jsonapi"
 )
 
 func createBlog(w http.ResponseWriter, r *http.Request) {

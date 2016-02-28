@@ -23,8 +23,8 @@
 			"Rev": "56b76bdf51f7708750eac80fa38b952bb9f32639"
 		},
 		{
-			"ImportPath": "github.com/shwoodard/jsonapi",
-			"Rev": "ffd7d3c05d02af4a41d2f0a53b45f8f24ce54cd9"
+			"ImportPath": "github.com/pasangsherpa/jsonapi",
+			"Rev": "1edbe278c07c98e1be58c1e1d016b6232b66e8ca"
 		},
 		{
 			"ImportPath": "golang.org/x/net/context",
