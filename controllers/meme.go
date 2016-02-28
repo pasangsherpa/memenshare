@@ -4,7 +4,7 @@ import (
 	"net/http"
 
 	"github.com/pasangsherpa/memenshare/Godeps/_workspace/src/github.com/gin-gonic/gin"
-	"github.com/pasangsherpa/memenshare/Godeps/_workspace/src/github.com/shwoodard/jsonapi"
+	"github.com/pasangsherpa/memenshare/Godeps/_workspace/src/github.com/pasangsherpa/jsonapi"
 	"github.com/pasangsherpa/memenshare/Godeps/_workspace/src/gopkg.in/mgo.v2"
 	"github.com/pasangsherpa/memenshare/Godeps/_workspace/src/gopkg.in/mgo.v2/bson"
 	"github.com/pasangsherpa/memenshare/models"
@@ -35,8 +35,6 @@ func (mc MemeController) GetMemes(c *gin.Context) {
 	memeInterface := make([]interface{}, len(memes))
 
 	for i, meme := range memes {
-		// set primary id value to use bson id
-		meme.Id = meme.Bid.Hex()
 		memeInterface[i] = &meme
 	}
 
@@ -68,9 +66,6 @@ func (mc MemeController) GetMeme(c *gin.Context) {
 		c.JSON(http.StatusNotFound, err)
 		return
 	}
-
-	// set primary id value to use bson id
-	meme.Id = meme.Bid.Hex()
 
 	c.Writer.Header().Set("Content-Type", "application/vnd.api+json")
 	if err := jsonapi.MarshalOnePayload(c.Writer, meme); err != nil {
