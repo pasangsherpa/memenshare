@@ -37,18 +37,14 @@ func (mc MemeController) GetMemes(c *gin.Context) {
 	for i, meme := range memes {
 		// set primary id value to use bson id
 		meme.Id = meme.Bid.Hex()
-		memeInterface[i] = meme
+		memeInterface[i] = &meme
 	}
 
-	// fmt.Printf("Models %+v\n", memes)
-
 	c.Writer.Header().Set("Content-Type", "application/vnd.api+json")
-	// if err := jsonapi.MarshalManyPayload(c.Writer, memeInterface); err != nil {
-	// 	c.JSON(http.StatusInternalServerError, err)
-	// 	return
-	// }
-
-	c.JSON(http.StatusOK, memeInterface)
+	if err := jsonapi.MarshalManyPayload(c.Writer, memeInterface); err != nil {
+		c.JSON(http.StatusInternalServerError, err)
+		return
+	}
 }
 
 func (mc MemeController) GetMeme(c *gin.Context) {
