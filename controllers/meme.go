@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"encoding/json"
 	"fmt"
 	"net/http"
 
@@ -83,23 +84,20 @@ func (mc MemeController) GetMeme(c *gin.Context) {
 		return
 	}
 
-	fmt.Printf("meme %+v\n", meme)
-
-	c.Writer.Header().Set("Content-Type", "application/vnd.api+json")
-
 	marshalResult, err := jsonapi.Marshal(meme)
-
-	// fmt.Printf("marshalResult %+v\n", marshalResult)
 
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, err)
 		return
 	}
 
-	c.JSON(http.StatusOK, marshalResult)
-	// if err := jsonapi.MarshalOnePayloadWithExtras(c.Writer, meme, func(extras *jsonapi.ApiExtras) {
-	// 	extras.AddRootLink("self", linkTemplateMemes+"/"+id)
-	// }); err != nil {
-	// 	c.JSON(http.StatusInternalServerError, err)
-	// }
+	c.Writer.Header().Set("Content-Type", "application/vnd.api+json")
+
+	var result map[string]interface{}
+	if err := json.Unmarshal(marshalResult, &result); err != nil {
+		c.JSON(http.StatusInternalServerError, err)
+		return
+	}
+
+	c.JSON(http.StatusOK, result)
 }
