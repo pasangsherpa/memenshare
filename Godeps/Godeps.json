@@ -6,6 +6,10 @@
 	],
 	"Deps": [
 		{
+			"ImportPath": "github.com/gedex/inflector",
+			"Rev": "8c0e57904488c554ab26caec525db5c92b23f051"
+		},
+		{
 			"ImportPath": "github.com/gin-gonic/gin",
 			"Comment": "v1.0rc1-148-g52fcc5d",
 			"Rev": "52fcc5dbf6e94df33ad313858fb94b713e9d1b4a"
@@ -15,16 +19,17 @@
 			"Rev": "fe6ea2c8e398672518ef204bf0fbd9af858d0e15"
 		},
 		{
+			"ImportPath": "github.com/manyminds/api2go/jsonapi",
+			"Comment": "1.0-RC1-30-g0f0aba6",
+			"Rev": "0f0aba686fffe91897ee4b7e1d682efbfcbac7fd"
+		},
+		{
 			"ImportPath": "github.com/mattn/go-colorable",
 			"Rev": "3dac7b4f76f6e17fb39b768b89e3783d16e237fe"
 		},
 		{
 			"ImportPath": "github.com/mattn/go-isatty",
 			"Rev": "56b76bdf51f7708750eac80fa38b952bb9f32639"
-		},
-		{
-			"ImportPath": "github.com/pasangsherpa/jsonapi",
-			"Rev": "1edbe278c07c98e1be58c1e1d016b6232b66e8ca"
 		},
 		{
 			"ImportPath": "golang.org/x/net/context",
