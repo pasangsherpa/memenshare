@@ -2,6 +2,7 @@ package utils
 
 import (
 	"encoding/json"
+	"io"
 
 	"github.com/manyminds/api2go/jsonapi"
 	"github.com/pasangsherpa/memenshare/models"
@@ -9,7 +10,7 @@ import (
 
 func Marshal(in interface{}) (models.Response, error) {
 	result := models.Response{}
-	data, err := jsonapi.Marshal(in)
+	data, err := jsonapi.MarshalWithURLs(in, nil)
 
 	if err != nil {
 		return result, err
@@ -20,4 +21,18 @@ func Marshal(in interface{}) (models.Response, error) {
 	}
 
 	return result, nil
+}
+
+func MarshalAndRender(w io.Writer, in interface{}) error {
+	result, err := Marshal(in)
+
+	if err != nil {
+		return err
+	}
+
+	if err := json.NewEncoder(w).Encode(result.Res); err != nil {
+		return err
+	}
+
+	return nil
 }
