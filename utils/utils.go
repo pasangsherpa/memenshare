@@ -1,16 +1,23 @@
 package utils
 
-func Marshal(in interface{}) (interface{}, error) {
-	// data, err := jsonapi.Marshal(in)
+import (
+	"encoding/json"
 
-	// if err != nil {
-	// 	return make([]interface{}, 0), err
-	// }
+	"github.com/manyminds/api2go/jsonapi"
+	"github.com/pasangsherpa/memenshare/models"
+)
 
-	// var result map[string]interface{}
-	// if err := json.Unmarshal(data, &result); err != nil {
-	// 	return make([]interface{}, 0), err
-	// }
+func Marshal(in interface{}) (models.Response, error) {
+	result := models.Response{}
+	data, err := jsonapi.Marshal(in)
 
-	return make([]interface{}, 0), nil
+	if err != nil {
+		return result, err
+	}
+
+	if err := json.Unmarshal(data, &result.Res); err != nil {
+		return result, err
+	}
+
+	return result, nil
 }

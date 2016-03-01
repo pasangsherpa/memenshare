@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"encoding/json"
 	"fmt"
 	"net/http"
 
@@ -10,6 +9,7 @@ import (
 	"github.com/pasangsherpa/memenshare/Godeps/_workspace/src/gopkg.in/mgo.v2"
 	"github.com/pasangsherpa/memenshare/Godeps/_workspace/src/gopkg.in/mgo.v2/bson"
 	"github.com/pasangsherpa/memenshare/models"
+	"github.com/pasangsherpa/memenshare/utils"
 )
 
 type (
@@ -84,7 +84,7 @@ func (mc MemeController) GetMeme(c *gin.Context) {
 		return
 	}
 
-	marshalResult, err := jsonapi.Marshal(meme)
+	response, err := utils.Marshal(meme)
 
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, err)
@@ -92,12 +92,5 @@ func (mc MemeController) GetMeme(c *gin.Context) {
 	}
 
 	c.Writer.Header().Set("Content-Type", "application/vnd.api+json")
-
-	var result map[string]interface{}
-	if err := json.Unmarshal(marshalResult, &result); err != nil {
-		c.JSON(http.StatusInternalServerError, err)
-		return
-	}
-
-	c.JSON(http.StatusOK, result)
+	c.JSON(http.StatusOK, response.Res)
 }
