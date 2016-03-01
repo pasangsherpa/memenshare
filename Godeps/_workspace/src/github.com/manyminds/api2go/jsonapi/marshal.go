@@ -306,7 +306,6 @@ func getIncludedStructs(included MarshalIncludedRelations, information ServerInf
 }
 
 func marshalStruct(data MarshalIdentifier, information ServerInformation) (Document, error) {
-	fmt.Printf("marshalStructing ----------->", data)
 	result := Document{}
 	contentData, err := marshalData(data, information)
 	if err != nil {
