@@ -22,7 +22,7 @@ func NewMemeController(c *mgo.Collection) *MemeController {
 	return &MemeController{c}
 }
 
-func (mc MemeController) GetMemes(c *gin.Context) {
+func (mc *MemeController) GetMemes(c *gin.Context) {
 	// stub meme collection
 	var memes []models.Meme
 
@@ -39,7 +39,7 @@ func (mc MemeController) GetMemes(c *gin.Context) {
 	}
 }
 
-func (mc MemeController) GetMeme(c *gin.Context) {
+func (mc *MemeController) GetMeme(c *gin.Context) {
 	// grab id from url param
 	id := c.Params.ByName("id")
 
@@ -53,7 +53,7 @@ func (mc MemeController) GetMeme(c *gin.Context) {
 	}
 
 	// stub meme
-	meme := new(models.Meme)
+	meme := &models.Meme{}
 
 	// fetch meme
 	if err := mc.collection.FindId(bson.ObjectIdHex(id)).One(&meme); err != nil {

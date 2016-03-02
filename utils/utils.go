@@ -8,8 +8,8 @@ import (
 	"github.com/pasangsherpa/memenshare/models"
 )
 
-func Marshal(in interface{}) (models.Response, error) {
-	result := models.Response{}
+func Marshal(in interface{}) (*models.Response, error) {
+	result := &models.Response{}
 	data, err := jsonapi.MarshalWithURLs(in, nil)
 
 	if err != nil {
@@ -30,7 +30,7 @@ func MarshalAndRender(w io.Writer, in interface{}) error {
 		return err
 	}
 
-	if err := json.NewEncoder(w).Encode(result.Res); err != nil {
+	if err := json.NewEncoder(w).Encode(&result.Res); err != nil {
 		return err
 	}
 
