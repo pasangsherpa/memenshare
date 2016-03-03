@@ -10,7 +10,7 @@ import (
 
 func Marshal(in interface{}) (*models.Response, error) {
 	result := &models.Response{}
-	data, err := jsonapi.MarshalWithURLs(in, nil)
+	data, err := jsonapi.MarshalWithURLs(in, &ServerInfo{})
 
 	if err != nil {
 		return result, err
@@ -23,7 +23,7 @@ func Marshal(in interface{}) (*models.Response, error) {
 	return result, nil
 }
 
-func MarshalAndRender(w io.Writer, in interface{}) error {
+func MarshalAndWrite(w io.Writer, in interface{}) error {
 	result, err := Marshal(in)
 
 	if err != nil {

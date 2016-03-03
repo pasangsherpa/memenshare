@@ -33,7 +33,7 @@ func (mc *MemeController) GetMemes(c *gin.Context) {
 	}
 
 	c.Writer.Header().Set("Content-Type", "application/vnd.api+json")
-	if err := utils.MarshalAndRender(c.Writer, memes); err != nil {
+	if err := utils.MarshalAndWrite(c.Writer, memes); err != nil {
 		c.JSON(http.StatusInternalServerError, err)
 		return
 	}
@@ -62,7 +62,7 @@ func (mc *MemeController) GetMeme(c *gin.Context) {
 	}
 
 	c.Writer.Header().Set("Content-Type", "application/vnd.api+json")
-	if err := utils.MarshalAndRender(c.Writer, meme); err != nil {
+	if err := utils.MarshalAndWrite(c.Writer, meme); err != nil {
 		c.JSON(http.StatusInternalServerError, err)
 		return
 	}
