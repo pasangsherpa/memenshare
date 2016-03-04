@@ -21,7 +21,7 @@ func (m Meme) GetID() string {
 }
 
 // SetID to satisfy jsonapi.UnmarshalIdentifier interface
-func (m *Meme) SetID(id bson.ObjectId) error {
-	m.ID = id
+func (m *Meme) SetID(id string) error {
+	m.ID = bson.NewObjectId()
 	return nil
 }
