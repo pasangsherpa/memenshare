@@ -36,3 +36,7 @@ func MarshalAndWrite(w io.Writer, in interface{}) error {
 
 	return nil
 }
+
+func Unmarshal(data []byte, target interface{}) error {
+	return jsonapi.Unmarshal(data, target)
+}
