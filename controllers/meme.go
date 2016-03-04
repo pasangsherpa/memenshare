@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"io/ioutil"
 	"net/http"
 
 	"github.com/pasangsherpa/memenshare/Godeps/_workspace/src/github.com/gin-gonic/gin"
@@ -64,6 +65,32 @@ func (mc *MemeController) GetMeme(c *gin.Context) {
 	c.Writer.Header().Set("Content-Type", "application/vnd.api+json")
 	if err := utils.MarshalAndWrite(c.Writer, meme); err != nil {
 		c.JSON(http.StatusInternalServerError, err)
+		return
+	}
+}
+
+func (mc *MemeController) CreateMeme(c *gin.Context) {
+	// stub meme
+	meme := &models.Meme{}
+
+	var bodyBytes []byte
+	if c.Request.Body != nil {
+		bodyBytes, _ = ioutil.ReadAll(c.Request.Body)
+	}
+
+	if err := utils.Unmarshal(bodyBytes, meme); err != nil {
+		c.JSON(http.StatusInternalServerError, err)
+		return
+	}
+
+	if err := mc.collection.Insert(meme); err != nil {
+		c.JSON(http.StatusInternalServerError, err)
+		return
+	}
+
+	c.Writer.Header().Set("Location", "http://localhost:3000/api/memes/"+meme.GetID())
+	c.Writer.WriteHeader(http.StatusCreated)
+	if err := utils.MarshalAndWrite(c.Writer, meme); err != nil {
 		return
 	}
 }
