@@ -49,6 +49,7 @@ func main() {
 		api.GET("/ping", pong)
 		api.GET("/memes/", mc.GetMemes)
 		api.GET("/memes/:id", mc.GetMeme)
+
 		api.POST("/memes", mc.CreateMeme)
 	}
 

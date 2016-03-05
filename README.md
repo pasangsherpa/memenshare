@@ -28,3 +28,5 @@ REST API is available on "/" using:
 * POST method with `Content-Type`:
     * *application/json*
     * *application/x-www-form-urlencoded*
+
+* /api/memes
